@@ -17,8 +17,9 @@
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#0f1015',
-                        darkCard: '#181b22',
+                        darkBg: '#0b0c10',
+                        darkCard: '#13151c',
+                        darkCardBorder: '#1f2330',
                         brandOrange: '#ff6600',
                         brandOrangeHover: '#e05a00'
                     }
@@ -31,217 +32,228 @@
 
     <div>
         <!-- Header -->
-        <header class="border-b border-gray-800 bg-darkCard px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+        <header class="border-b border-darkCardBorder bg-darkCard px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-3">
-                <span class="text-2xl font-black tracking-wider text-brandOrange">BET <span class="text-white">TRADE</span></span>
-                <span id="localStatus" class="text-[10px] bg-green-500/10 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full font-medium">Cloud Sincronizado ☁️</span>
+                <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-orange-400 via-amber-300 to-yellow-500 bg-clip-text text-transparent">BET <span class="text-white">TRADE</span></span>
+                <span id="localStatus" class="text-[10px] bg-green-500/10 text-green-400 border border-green-500/30 px-2.5 py-1 rounded-full font-semibold">Cloud Sincronizado ☁️️</span>
             </div>
             
-            <!-- Menu de Abas (Gestão vs Alavancagem) -->
-            <div class="flex items-center bg-darkBg border border-gray-800 p-1 rounded-xl">
-                <button onclick="mudarAba('gestao')" id="tabGestao" class="px-4 py-1.5 rounded-lg text-xs font-bold transition bg-brandOrange text-white shadow">Gestão de Banca</button>
-                <button onclick="mudarAba('alavancagem')" id="tabAlavancagem" class="px-4 py-1.5 rounded-lg text-xs font-bold transition text-gray-400 hover:text-white">Menu de Alavancagem</button>
+            <!-- Menu de Abas -->
+            <div class="flex items-center bg-darkBg border border-darkCardBorder p-1 rounded-xl">
+                <button onclick="mudarAba('gestao')" id="tabGestao" class="px-5 py-2 rounded-lg text-xs font-bold transition bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20">Gestão de Banca</button>
+                <button onclick="mudarAba('alavancagem')" id="tabAlavancagem" class="px-5 py-2 rounded-lg text-xs font-bold transition text-gray-400 hover:text-white">Menu de Alavancagem</button>
             </div>
 
-            <!-- Bloco da Banca Editável (Aparece na aba Gestão) -->
-            <div id="blocoBancaHeader" class="flex items-center gap-3 bg-darkBg border border-gray-800 px-4 py-2 rounded-xl">
+            <!-- Bloco da Banca Editável -->
+            <div id="blocoBancaHeader" class="flex items-center gap-3 bg-darkBg border border-darkCardBorder px-4 py-2 rounded-xl">
                 <div class="text-xs uppercase text-gray-400 font-semibold">Banca Inicial:</div>
                 <div class="flex items-center gap-1">
-                    <span class="text-brandOrange font-bold">R$</span>
-                    <input type="number" step="0.01" id="inputBancaInicial" value="1000.00" class="w-28 bg-transparent text-white font-bold text-sm focus:outline-none focus:border-b focus:border-brandOrange" title="Clique para editar a banca inicial">
+                    <span class="text-amber-400 font-bold text-sm">R$</span>
+                    <input type="number" step="0.01" id="inputBancaInicial" value="1000.00" class="w-28 bg-transparent text-white font-bold text-sm focus:outline-none border-b border-transparent focus:border-amber-400" title="Clique para editar a banca inicial">
                 </div>
-                <button onclick="salvarBancaInicial()" class="text-xs bg-gray-800 hover:bg-brandOrange text-gray-300 hover:text-white px-2.5 py-1 rounded transition">Salvar</button>
+                <button onclick="salvarBancaInicial()" class="text-xs bg-darkCard hover:bg-amber-500 hover:text-black font-semibold text-gray-300 px-3 py-1 rounded-lg transition border border-darkCardBorder">Salvar</button>
             </div>
         </header>
 
         <!-- Main Container -->
-        <main class="max-w-7xl w-full mx-auto p-6">
+        <main class="max-w-7xl w-full mx-auto p-6 space-y-6">
             
             <!-- SEÇÃO 1: GESTÃO DE BANCA -->
-            <div id="secaoGestao" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Coluna da Esquerda: Formulário de Cadastro -->
-                <section class="bg-darkCard border border-gray-800 rounded-xl p-6 h-fit shadow-lg">
-                    <h2 class="text-xl font-bold mb-4 text-brandOrange flex items-center gap-2">
-                        ⚡ Nova Entrada
-                    </h2>
-                    <form id="betForm" class="space-y-4">
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Esporte / Evento</label>
-                            <input type="text" id="evento" required placeholder="Ex: Flamengo x Palmeiras" class="w-full bg-darkBg border border-gray-700 rounded-lg p-2.5 text-sm focus:outline-none focus:border-brandOrange text-white">
-                        </div>
+            <div id="secaoGestao" class="space-y-6">
 
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Mercado</label>
-                            <select id="mercado" class="w-full bg-darkBg border border-gray-700 rounded-lg p-2.5 text-sm focus:outline-none focus:border-brandOrange text-white">
-                                <option value="Gols">Gols (Over/Under)</option>
-                                <option value="Escanteios">Escanteios</option>
-                                <option value="Cartões">Cartões</option>
-                                <option value="Handicap">Handicap</option>
-                                <option value="Outros">Outros</option>
-                            </select>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
+                <!-- Cards de Estatísticas -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-gradient-to-br from-blue-600 to-indigo-700 p-5 rounded-2xl shadow-lg text-white relative overflow-hidden">
+                        <div class="flex justify-between items-start">
                             <div>
-                                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Odd</label>
-                                <input type="number" step="0.01" id="odd" required placeholder="1.85" class="w-full bg-darkBg border border-gray-700 rounded-lg p-2.5 text-sm focus:outline-none focus:border-brandOrange text-white">
+                                <p class="text-xs uppercase font-bold tracking-wider text-blue-200">Banca Atual</p>
+                                <p id="statBancaAtual" class="text-2xl font-black mt-2">R$ 1.000,00</p>
                             </div>
+                            <span id="badgeBancaVar" class="text-[10px] bg-white/20 px-2 py-1 rounded-lg font-bold text-white flex items-center gap-1">↑ 0.0%</span>
+                        </div>
+                        <p class="text-[11px] text-blue-200/80 mt-3">Capital total acumulado</p>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-purple-600 to-pink-600 p-5 rounded-2xl shadow-lg text-white relative overflow-hidden">
+                        <div class="flex justify-between items-start">
                             <div>
-                                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Stake (R$)</label>
-                                <input type="number" step="0.01" id="stake" required placeholder="50.00" class="w-full bg-darkBg border border-gray-700 rounded-lg p-2.5 text-sm focus:outline-none focus:border-brandOrange text-white font-bold text-brandOrange">
+                                <p class="text-xs uppercase font-bold tracking-wider text-purple-200">Lucro Líquido</p>
+                                <p id="statLucro" class="text-2xl font-black mt-2">R$ 0,00</p>
                             </div>
+                            <span id="badgeRoi" class="text-[10px] bg-white/20 px-2 py-1 rounded-lg font-bold text-white">ROI: 0%</span>
                         </div>
+                        <p class="text-[11px] text-purple-200/80 mt-3">Resultado absoluto do período</p>
+                    </div>
 
-                        <!-- Gestão de Capital: Porcentagem de Entrada Selecionável -->
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Sugestão de Stake (% da Banca Atual)</label>
-                            <div class="grid grid-cols-4 gap-2 mb-2">
-                                <button type="button" onclick="selecionarPorcentagem(0.01, this)" class="btn-pct bg-darkBg border border-gray-700 hover:border-brandOrange text-xs text-gray-300 py-1.5 rounded transition font-semibold" data-val="0.01">1%</button>
-                                <button type="button" onclick="selecionarPorcentagem(0.02, this)" class="btn-pct bg-darkBg border border-gray-700 hover:border-brandOrange text-xs text-gray-300 py-1.5 rounded transition font-semibold" data-val="0.02">2%</button>
-                                <button type="button" onclick="selecionarPorcentagem(0.03, this)" class="btn-pct bg-darkBg border border-gray-700 hover:border-brandOrange text-xs text-gray-300 py-1.5 rounded transition font-semibold" data-val="0.03">3%</button>
-                                <button type="button" onclick="selecionarPorcentagem(0.05, this)" class="btn-pct bg-darkBg border border-gray-700 hover:border-brandOrange text-xs text-gray-300 py-1.5 rounded transition font-semibold" data-val="0.05">5%</button>
+                    <div class="bg-gradient-to-br from-emerald-600 to-teal-700 p-5 rounded-2xl shadow-lg text-white relative overflow-hidden">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs uppercase font-bold tracking-wider text-emerald-200">Assertividade (Greens)</p>
+                                <p id="statWinrate" class="text-2xl font-black mt-2">0.0%</p>
                             </div>
-                            <p class="text-xs text-gray-400">Capital exato selecionado: <span id="infoCapitalExato" class="text-brandOrange font-bold">R$ 0,00</span></p>
+                            <span id="badgeGreensReds" class="text-[10px] bg-white/20 px-2 py-1 rounded-lg font-bold text-white">0G / 0R</span>
                         </div>
-
-                        <button type="submit" class="w-full bg-brandOrange hover:bg-brandOrangeHover text-white font-bold py-2.5 rounded-lg transition-all shadow-md shadow-orange-900/20 mt-2">
-                            Cadastrar Aposta
-                        </button>
-                    </form>
-                </section>
-
-                <!-- Coluna da Direita: Dashboard, Gráfico e Histórico -->
-                <section class="lg:col-span-2 space-y-6">
-                    
-                    <!-- Cards de Estatísticas -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="bg-darkCard border-2 border-brandOrange p-4 rounded-xl shadow-lg shadow-orange-900/10">
-                            <p class="text-xs text-brandOrange uppercase font-bold tracking-wider">Banca Atual</p>
-                            <p id="statBancaAtual" class="text-2xl font-black text-white mt-1">R$ 1.000,00</p>
-                        </div>
-                        <div class="bg-darkCard border border-gray-800 p-4 rounded-xl">
-                            <p class="text-xs text-gray-400 uppercase">Lucro / Prejuízo Líquido</p>
-                            <p id="statLucro" class="text-xl font-black text-white mt-1">R$ 0,00</p>
-                        </div>
-                        <div class="bg-darkCard border border-gray-800 p-4 rounded-xl">
-                            <p class="text-xs text-gray-400 uppercase">Total de Entradas</p>
-                            <p id="statTotal" class="text-xl font-black text-white mt-1">0</p>
-                        </div>
+                        <p class="text-[11px] text-emerald-200/80 mt-3">Taxa de sucesso nas apostas</p>
                     </div>
 
-                    <!-- Gráfico de Desempenho por Mercado -->
-                    <div class="bg-darkCard border border-gray-800 rounded-xl p-6 shadow-lg">
-                        <h2 class="text-lg font-bold text-white mb-2">Desempenho por Mercado (Qtd. de Greens vs Reds)</h2>
-                        <div class="h-48 relative">
-                            <canvas id="mercadoChart"></canvas>
+                    <div class="bg-gradient-to-br from-amber-500 to-orange-600 p-5 rounded-2xl shadow-lg text-white relative overflow-hidden">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs uppercase font-bold tracking-wider text-amber-100">Total de Entradas</p>
+                                <p id="statTotal" class="text-2xl font-black mt-2">0</p>
+                            </div>
+                            <span id="badgeOddMedia" class="text-[10px] bg-white/20 px-2 py-1 rounded-lg font-bold text-white">Odd Média: 0.00</span>
                         </div>
-                    </div>
-
-                    <!-- Tabela de Histórico -->
-                    <div class="bg-darkCard border border-gray-800 rounded-xl p-6 shadow-lg">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold text-white">Histórico de Entradas</h2>
-                            <button onclick="limparHistorico()" class="text-xs text-red-400 hover:text-red-300 border border-red-900/40 hover:border-red-600 px-3 py-1.5 rounded-lg transition">Limpar Tudo</button>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="border-b border-gray-800 text-xs uppercase text-gray-400">
-                                        <th class="py-3 px-2">Evento</th>
-                                        <th class="py-3 px-2">Mercado</th>
-                                        <th class="py-3 px-2">Odd</th>
-                                        <th class="py-3 px-2">Stake (% Banca)</th>
-                                        <th class="py-3 px-2">Status</th>
-                                        <th class="py-3 px-2 text-center">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="betTableBody" class="text-sm divide-y divide-gray-800/50">
-                                    <tr><td colspan="6" class="py-6 text-center text-gray-500">Nenhuma aposta cadastrada.</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </section>
-            </div>
-
-            <!-- SEÇÃO 2: MENU DE ALAVANCAGEM -->
-            <div id="secaoAlavancagem" class="space-y-8 hidden">
-                
-                <!-- Cabeçalho explicativo do Menu de Alavancagem -->
-                <div class="bg-darkCard border border-gray-800 rounded-xl p-6 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div>
-                        <h2 class="text-xl font-bold text-brandOrange flex items-center gap-2">🚀 Central de Alavancagem</h2>
-                        <p class="text-xs text-gray-400 mt-1">Planejamento mensal de crescimento composto e controle diário de ciclo de alavancagem.</p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="bg-darkBg border border-gray-700 px-4 py-2 rounded-xl text-center">
-                            <span class="text-[10px] uppercase text-gray-400 block font-semibold">Meta de Alavancagem</span>
-                            <span id="statMetaAlavancagem" class="text-lg font-black text-green-400">R$ 0,00</span>
-                        </div>
+                        <p class="text-[11px] text-amber-100/80 mt-3">Operações registradas no sistema</p>
                     </div>
                 </div>
 
-                <!-- TABELA 1: Planejamento Mensal -->
-                <div class="bg-darkCard border border-gray-800 rounded-xl p-6 shadow-lg">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-                        <div>
-                            <h3 class="text-lg font-bold text-white">1. Planejamento de Alavancagem Mensal</h3>
-                            <p class="text-xs text-gray-400">Acompanhe mês a mês a banca inicial, projeção de lucro, aportes e resultado do ciclo.</p>
+                <!-- Grid Formulário + Gráficos -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <section class="bg-darkCard border border-darkCardBorder rounded-2xl p-6 h-fit shadow-xl">
+                        <h2 class="text-lg font-bold mb-5 text-white flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-orange-500 inline-block"></span> Nova Entrada
+                        </h2>
+                        <form id="betForm" class="space-y-4">
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1.5 font-semibold">Esporte / Evento</label>
+                                <input type="text" id="evento" required placeholder="Ex: Flamengo x Palmeiras" class="w-full bg-darkBg border border-darkCardBorder rounded-xl p-3 text-sm focus:outline-none focus:border-amber-500 text-white transition">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1.5 font-semibold">Mercado</label>
+                                <select id="mercado" class="w-full bg-darkBg border border-darkCardBorder rounded-xl p-3 text-sm focus:outline-none focus:border-amber-500 text-white transition">
+                                    <option value="Gols">Gols (Over/Under)</option>
+                                    <option value="Escanteios">Escanteios</option>
+                                    <option value="Cartões">Cartões</option>
+                                    <option value="Handicap">Handicap</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1.5 font-semibold">Odd</label>
+                                    <input type="number" step="0.01" id="odd" required placeholder="1.85" class="w-full bg-darkBg border border-darkCardBorder rounded-xl p-3 text-sm focus:outline-none focus:border-amber-500 text-white transition">
+                                </div>
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1.5 font-semibold">Stake (R$)</label>
+                                    <input type="number" step="0.01" id="stake" required placeholder="50.00" class="w-full bg-darkBg border border-darkCardBorder rounded-xl p-3 text-sm focus:outline-none focus:border-amber-500 text-amber-400 font-bold transition">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1.5 font-semibold">Sugestão de Stake (% Banca)</label>
+                                <div class="grid grid-cols-4 gap-2 mb-2">
+                                    <button type="button" onclick="selecionarPorcentagem(0.01, this)" class="btn-pct bg-darkBg border border-darkCardBorder hover:border-amber-500 text-xs text-gray-300 py-2 rounded-lg transition font-semibold" data-val="0.01">1%</button>
+                                    <button type="button" onclick="selecionarPorcentagem(0.02, this)" class="btn-pct bg-darkBg border border-darkCardBorder hover:border-amber-500 text-xs text-gray-300 py-2 rounded-lg transition font-semibold" data-val="0.02">2%</button>
+                                    <button type="button" onclick="selecionarPorcentagem(0.03, this)" class="btn-pct bg-darkBg border border-darkCardBorder hover:border-amber-500 text-xs text-gray-300 py-2 rounded-lg transition font-semibold" data-val="0.03">3%</button>
+                                    <button type="button" onclick="selecionarPorcentagem(0.05, this)" class="btn-pct bg-darkBg border border-darkCardBorder hover:border-amber-500 text-xs text-gray-300 py-2 rounded-lg transition font-semibold" data-val="0.05">5%</button>
+                                </div>
+                                <p class="text-xs text-gray-400">Capital exato: <span id="infoCapitalExato" class="text-amber-400 font-bold">R$ 0,00</span></p>
+                            </div>
+
+                            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-orange-500/20 mt-2">
+                                Cadastrar Aposta
+                            </button>
+                        </form>
+                    </section>
+
+                    <section class="lg:col-span-2 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-darkCard border border-darkCardBorder rounded-2xl p-5 shadow-xl">
+                                <h3 class="text-sm font-bold text-gray-300 mb-4 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Greens vs Reds por Mercado
+                                </h3>
+                                <div class="h-48 relative">
+                                    <canvas id="mercadoChart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="bg-darkCard border border-darkCardBorder rounded-2xl p-5 shadow-xl">
+                                <h3 class="text-sm font-bold text-gray-300 mb-4 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-cyan-500"></span> Distribuição por Mercado
+                                </h3>
+                                <div class="h-48 relative">
+                                    <canvas id="donutChart"></canvas>
+                                </div>
+                            </div>
                         </div>
-                        <button onclick="adicionarMesAlavancagem()" class="bg-brandOrange hover:bg-brandOrangeHover text-white text-xs font-bold px-3 py-2 rounded-lg transition">
-                            + Adicionar Mês
-                        </button>
+                    </section>
+                </div>
+
+                <!-- Tabela de Histórico -->
+                <div class="bg-darkCard border border-darkCardBorder rounded-2xl p-6 shadow-xl">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 gap-3">
+                        <div>
+                            <h2 class="text-lg font-bold text-white">Histórico Geral de Entradas</h2>
+                            <p class="text-xs text-gray-400 mt-0.5">Acompanhe seus palpites com o valor exato do retorno visualizado na linha</p>
+                        </div>
+                        <button onclick="limparHistorico()" class="text-xs text-red-400 hover:text-red-300 border border-red-900/40 hover:border-red-600 px-3.5 py-2 rounded-xl transition">Limpar Histórico</button>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="border-b border-gray-800 text-xs uppercase text-gray-400">
-                                    <th class="py-3 px-3">Mês</th>
-                                    <th class="py-3 px-3">Banca Inicial (R$)</th>
-                                    <th class="py-3 px-3">Lucro em %</th>
-                                    <th class="py-3 px-3">Aporte Mensal (R$)</th>
-                                    <th class="py-3 px-3">Banca Final (R$)</th>
-                                    <th class="py-3 px-3">Resultado Concluído?</th>
+                                <tr class="border-b border-darkCardBorder text-xs uppercase text-gray-400 font-semibold tracking-wider">
+                                    <th class="py-3 px-3">Evento</th>
+                                    <th class="py-3 px-3">Mercado</th>
+                                    <th class="py-3 px-3">Odd</th>
+                                    <th class="py-3 px-3">Stake (% Banca)</th>
+                                    <th class="py-3 px-3">Lucro / Prejuízo (R$)</th>
+                                    <th class="py-3 px-3">Status</th>
                                     <th class="py-3 px-3 text-center">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabelaMensalBody" class="text-sm divide-y divide-gray-800/50">
-                                <!-- Preenchido via JS -->
+                            <tbody id="betTableBody" class="text-sm divide-y divide-darkCardBorder/60">
+                                <tr><td colspan="7" class="py-8 text-center text-gray-500">Nenhuma aposta cadastrada.</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- TABELA 2: Alavancagem Diária / Ciclo -->
-                <div class="bg-darkCard border border-gray-800 rounded-xl p-6 shadow-lg">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+            </div>
+
+            <!-- SEÇÃO 2: MENU DE ALAVANCAGEM -->
+            <div id="secaoAlavancagem" class="space-y-8 hidden">
+                
+                <!-- Cabeçalho explicativo -->
+                <div class="bg-darkCard border border-darkCardBorder rounded-2xl p-6 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2">🚀 Controle de Alavancagem</h2>
+                        <p class="text-xs text-gray-400 mt-1">Gerencie seu ciclo de alavancagem com entradas sequenciais e cálculo automático de retorno.</p>
+                    </div>
+                </div>
+
+                <!-- Controle Diário (Tabela Apenas) -->
+                <div class="bg-darkCard border border-darkCardBorder rounded-2xl p-6 shadow-xl space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                         <div>
-                            <h3 class="text-lg font-bold text-white">2. Controle Diário de Alavancagem</h3>
-                            <p class="text-xs text-gray-400">Simule entradas sequenciais com odds selecionáveis (de 1.00 a 3.00) e cálculo automático de retorno.</p>
+                            <h3 class="text-lg font-bold text-white">Controle Diário de Alavancagem</h3>
+                            <p class="text-xs text-gray-400">Simule entradas sequenciais com odds selecionáveis e cálculo automático de retorno.</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="adicionarDiaAlavancagem()" class="bg-brandOrange hover:bg-brandOrangeHover text-white text-xs font-bold px-3 py-2 rounded-lg transition">
-                                + Adicionar Dia/Entrada
+                            <button onclick="adicionarDiaAlavancagem()" class="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg shadow-orange-500/20">
+                                + Adicionar Entrada
                             </button>
-                            <button onclick="resetarAlavancagemDiaria()" class="text-xs text-red-400 hover:text-red-300 border border-red-900/40 hover:border-red-600 px-3 py-2 rounded-lg transition">
+                            <button onclick="resetarAlavancagemDiaria()" class="text-xs text-red-400 hover:text-red-300 border border-red-900/40 hover:border-red-600 px-3.5 py-2.5 rounded-xl transition">
                                 Limpar Ciclo
                             </button>
                         </div>
                     </div>
+
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="border-b border-gray-800 text-xs uppercase text-gray-400">
-                                    <th class="py-3 px-3">Dia / Passo</th>
+                                <tr class="border-b border-darkCardBorder text-xs uppercase text-gray-400 font-semibold tracking-wider">
+                                    <th class="py-3 px-3">Passo / Dia</th>
                                     <th class="py-3 px-3">Valor da Aposta (R$)</th>
-                                    <th class="py-3 px-3">Odds (Selecionável)</th>
+                                    <th class="py-3 px-3">Odds</th>
                                     <th class="py-3 px-3">Retorno Estimado (R$)</th>
                                     <th class="py-3 px-3">Resultado</th>
                                     <th class="py-3 px-3 text-center">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabelaDiariaBody" class="text-sm divide-y divide-gray-800/50">
+                            <tbody id="tabelaDiariaBody" class="text-sm divide-y divide-darkCardBorder/60">
                                 <!-- Preenchido via JS -->
                             </tbody>
                         </table>
@@ -253,17 +265,16 @@
         </main>
     </div>
 
-    <!-- Rodapé com Botão Amarelo de Desfazer Exclusão -->
-    <footer class="border-t border-gray-800 bg-darkCard px-6 py-4 mt-8 flex justify-between items-center max-w-7xl w-full mx-auto rounded-t-xl">
-        <span class="text-xs text-gray-400">Bet Trade - Sincronizado com Firebase Cloud</span>
-        <button id="btnDesfazer" onclick="desfazerExclusao()" disabled class="bg-gray-800 text-gray-500 font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wider transition flex items-center gap-1.5 cursor-not-allowed">
+    <!-- Rodapé com Botão de Desfazer Exclusão -->
+    <footer class="border-t border-darkCardBorder bg-darkCard px-6 py-4 mt-8 flex justify-between items-center max-w-7xl w-full mx-auto rounded-t-2xl">
+        <span class="text-xs text-gray-400">Bet Trade Dashboard • Sincronizado com Firebase Cloud Firestore</span>
+        <button id="btnDesfazer" onclick="desfazerExclusao()" disabled class="bg-darkBg text-gray-500 font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition flex items-center gap-1.5 cursor-not-allowed border border-darkCardBorder">
             ↩ Desfazer Exclusão
         </button>
     </footer>
 
-    <!-- Lógica JavaScript (Firebase Cloud Firestore) -->
+    <!-- Lógica JavaScript (Firebase Cloud Firestore + Chart.js) -->
     <script>
-        // Configuração do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCB0GG_ibz0hBmkuSlgC33zHLp_6KfTHQg",
             authDomain: "bettradecloud.firebaseapp.com",
@@ -278,16 +289,15 @@
 
         let bets = [];
         let initialBank = 1000.00;
-        let mesesAlavancagem = [];
         let diasAlavancagem = [];
 
         let taxaSelecionada = null;
         let chartInstance = null;
+        let donutChartInstance = null;
         let ultimoEstadoExcluido = null;
 
         let isReceivingRemoteUpdate = false;
 
-        // Escuta os dados da nuvem em tempo real com onSnapshot
         function iniciarSincronizacaoTempoReal() {
             try {
                 const docRef = db.collection("bettrade").doc("dados_usuario");
@@ -298,14 +308,8 @@
                             const data = doc.data();
                             bets = data.bets || [];
                             initialBank = data.initialBank !== undefined ? data.initialBank : 1000.00;
-                            mesesAlavancagem = data.mesesAlavancagem || [];
                             diasAlavancagem = data.diasAlavancagem || [];
                         } else {
-                            // Dados padrão iniciais se o documento não existir
-                            mesesAlavancagem = [
-                                { id: 1, mes: 'Janeiro', bancaInicial: 1000.00, lucroPct: 30.00, aporte: 200.00, resultado: 'Sim' },
-                                { id: 2, mes: 'Fevereiro', bancaInicial: 1500.00, lucroPct: 35.00, aporte: 200.00, resultado: 'Pendente' }
-                            ];
                             diasAlavancagem = [
                                 { id: 1, dia: 'Dia 1', valor: 100.00, odd: 1.70, resultado: 'Green' }
                             ];
@@ -321,45 +325,42 @@
 
                         const statusBadge = document.getElementById('localStatus');
                         if (statusBadge) {
-                            statusBadge.className = "text-[10px] bg-green-500/10 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full font-medium";
+                            statusBadge.className = "text-[10px] bg-green-500/10 text-green-400 border border-green-500/30 px-2.5 py-1 rounded-full font-semibold";
                             statusBadge.innerHTML = "Tempo Real Sincronizado ⚡";
                         }
                     } catch (err) {
-                        console.error("Erro ao processar atualização do Firestore:", err);
+                        console.error("Erro no Firestore:", err);
                     } finally {
                         isReceivingRemoteUpdate = false;
                     }
                 }, (error) => {
-                    console.error("Erro ao escutar Firestore em tempo real:", error);
+                    console.error("Erro de conexão com Firestore:", error);
                     const statusBadge = document.getElementById('localStatus');
                     if (statusBadge) {
-                        statusBadge.className = "text-[10px] bg-red-500/10 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-full font-medium";
+                        statusBadge.className = "text-[10px] bg-red-500/10 text-red-400 border border-red-500/30 px-2.5 py-1 rounded-full font-semibold";
                         statusBadge.innerHTML = "Erro de Conexão ⚠️";
                     }
                 });
             } catch (e) {
-                console.error("Erro ao inicializar listener do Firestore:", e);
+                console.error("Erro listener Firestore:", e);
             }
         }
 
-        // Salva todos os dados na nuvem automaticamente
         async function salvarStorage() {
             if (isReceivingRemoteUpdate) return;
             try {
                 await db.collection("bettrade").doc("dados_usuario").set({
                     bets: bets,
                     initialBank: initialBank,
-                    mesesAlavancagem: mesesAlavancagem,
                     diasAlavancagem: diasAlavancagem
                 });
             } catch (e) {
-                console.error("Erro ao salvar no Firestore:", e);
+                console.error("Erro ao salvar:", e);
             }
         }
 
         iniciarSincronizacaoTempoReal();
 
-        // Sistema de Abas
         window.mudarAba = function(aba) {
             const secaoGestao = document.getElementById('secaoGestao');
             const secaoAlavancagem = document.getElementById('secaoAlavancagem');
@@ -371,14 +372,14 @@
                 secaoGestao.classList.remove('hidden');
                 secaoAlavancagem.classList.add('hidden');
                 blocoBancaHeader.classList.remove('hidden');
-                tabGestao.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition bg-brandOrange text-white shadow";
-                tabAlavancagem.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition text-gray-400 hover:text-white";
+                tabGestao.className = "px-5 py-2 rounded-lg text-xs font-bold transition bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20";
+                tabAlavancagem.className = "px-5 py-2 rounded-lg text-xs font-bold transition text-gray-400 hover:text-white";
             } else {
                 secaoGestao.classList.add('hidden');
                 secaoAlavancagem.classList.remove('hidden');
                 blocoBancaHeader.classList.add('hidden');
-                tabAlavancagem.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition bg-brandOrange text-white shadow";
-                tabGestao.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition text-gray-400 hover:text-white";
+                tabAlavancagem.className = "px-5 py-2 rounded-lg text-xs font-bold transition bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20";
+                tabGestao.className = "px-5 py-2 rounded-lg text-xs font-bold transition text-gray-400 hover:text-white";
                 updateAlavancagemUI();
             }
         }
@@ -386,13 +387,13 @@
         window.salvarBancaInicial = function() {
             const val = parseFloat(document.getElementById('inputBancaInicial').value);
             if (isNaN(val) || val < 0) {
-                alert('Por favor, insira um valor válido.');
+                alert('Insira um valor válido.');
                 return;
             }
             initialBank = val;
             salvarStorage();
             updateUI();
-            alert('Banca inicial salva na nuvem com sucesso!');
+            alert('Banca inicial atualizada!');
         }
 
         function calcularBancaAtualDinamica() {
@@ -410,11 +411,11 @@
         window.selecionarPorcentagem = function(taxa, elementoBtn) {
             taxaSelecionada = taxa;
             document.querySelectorAll('.btn-pct').forEach(btn => {
-                btn.classList.remove('border-brandOrange', 'bg-brandOrange/20', 'text-white');
-                btn.classList.add('border-gray-700', 'text-gray-300');
+                btn.classList.remove('border-amber-500', 'bg-amber-500/20', 'text-white');
+                btn.classList.add('border-darkCardBorder', 'text-gray-300');
             });
-            elementoBtn.classList.remove('border-gray-700', 'text-gray-300');
-            elementoBtn.classList.add('border-brandOrange', 'bg-brandOrange/20', 'text-white');
+            elementoBtn.classList.remove('border-darkCardBorder', 'text-gray-300');
+            elementoBtn.classList.add('border-amber-500', 'bg-amber-500/20', 'text-white');
             recalcularStakeInput();
         }
 
@@ -441,27 +442,44 @@
             tbody.innerHTML = '';
 
             let lucroTotal = 0;
+            let greens = 0;
+            let reds = 0;
+            let somaOdds = 0;
+
             bets.forEach(bet => {
+                somaOdds += parseFloat(bet.odd) || 0;
                 if (bet.status === 'Green') {
                     lucroTotal += (bet.stake * bet.odd) - bet.stake;
+                    greens++;
                 } else if (bet.status === 'Red') {
                     lucroTotal -= bet.stake;
+                    reds++;
                 }
             });
 
             let currentBank = initialBank + lucroTotal;
 
             if (bets.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-gray-500">Nenhuma aposta cadastrada.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-500">Nenhuma aposta cadastrada.</td></tr>`;
             } else {
                 bets.forEach((bet) => {
                     let percBanca = currentBank > 0 ? (bet.stake / currentBank) * 100 : 0;
-                    let mercadoBadge = `<span class="px-2 py-0.5 bg-gray-800 text-gray-300 rounded text-xs">${bet.mercado}</span>`;
+                    let mercadoBadge = `<span class="px-2.5 py-1 bg-darkBg border border-darkCardBorder text-gray-300 rounded-lg text-xs font-medium">${bet.mercado}</span>`;
+
+                    let valorRetornoColuna = '';
+                    if (bet.status === 'Green') {
+                        let valorLucro = (bet.stake * bet.odd) - bet.stake;
+                        valorRetornoColuna = `<span class="text-green-400 font-bold bg-green-500/10 border border-green-500/20 px-2.5 py-1 rounded-lg inline-block">+R$ ${valorLucro.toFixed(2)}</span>`;
+                    } else if (bet.status === 'Red') {
+                        valorRetornoColuna = `<span class="text-red-400 font-bold bg-red-500/10 border border-red-500/20 px-2.5 py-1 rounded-lg inline-block">-R$ ${bet.stake.toFixed(2)}</span>`;
+                    } else {
+                        valorRetornoColuna = `<span class="text-gray-500 font-medium">-</span>`;
+                    }
 
                     let statusSelect = `
-                        <select onchange="mudarStatus('${bet.id}', this.value)" class="bg-darkBg border border-gray-700 text-xs rounded px-2 py-1 focus:outline-none focus:border-brandOrange ${
-                            bet.status === 'Green' ? 'text-green-400 border-green-500/40' : 
-                            bet.status === 'Red' ? 'text-red-400 border-red-500/40' : 'text-yellow-400 border-yellow-500/40'
+                        <select onchange="mudarStatus('${bet.id}', this.value)" class="bg-darkBg border text-xs font-semibold rounded-lg px-2.5 py-1 focus:outline-none ${
+                            bet.status === 'Green' ? 'text-green-400 border-green-500/40 bg-green-500/5' : 
+                            bet.status === 'Red' ? 'text-red-400 border-red-500/40 bg-red-500/5' : 'text-amber-400 border-amber-500/40 bg-amber-500/5'
                         }">
                             <option value="Pendente" ${bet.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
                             <option value="Green" ${bet.status === 'Green' ? 'selected' : ''}>Green</option>
@@ -470,64 +488,101 @@
                     `;
 
                     const tr = document.createElement('tr');
+                    tr.className = "hover:bg-darkBg/40 transition";
                     tr.innerHTML = `
-                        <td class="py-3 px-2 font-medium text-white">${bet.evento}</td>
-                        <td class="py-3 px-2">${mercadoBadge}</td>
-                        <td class="py-3 px-2 text-gray-300">${bet.odd}</td>
-                        <td class="py-3 px-2 text-gray-300">R$ ${parseFloat(bet.stake).toFixed(2)} <span class="text-xs text-gray-500">(${percBanca.toFixed(1)}%)</span></td>
-                        <td class="py-3 px-2">${statusSelect}</td>
-                        <td class="py-3 px-2 text-center">
-                            <button onclick="deletarAposta('${bet.id}')" class="text-gray-500 hover:text-red-400 text-xs transition" title="Excluir">✕</button>
+                        <td class="py-3.5 px-3 font-semibold text-white">${bet.evento}</td>
+                        <td class="py-3.5 px-3">${mercadoBadge}</td>
+                        <td class="py-3.5 px-3 font-medium text-amber-400">${bet.odd.toFixed(2)}</td>
+                        <td class="py-3.5 px-3 text-gray-300">R$ ${parseFloat(bet.stake).toFixed(2)} <span class="text-xs text-gray-500">(${percBanca.toFixed(1)}%)</span></td>
+                        <td class="py-3.5 px-3">${valorRetornoColuna}</td>
+                        <td class="py-3.5 px-3">${statusSelect}</td>
+                        <td class="py-3.5 px-3 text-center">
+                            <button onclick="deletarAposta('${bet.id}')" class="text-gray-500 hover:text-red-400 text-xs transition p-1" title="Excluir">✕</button>
                         </td>
                     `;
                     tbody.appendChild(tr);
                 });
             }
 
-            document.getElementById('statLucro').innerText = `R$ ${lucroTotal.toFixed(2)}`;
-            document.getElementById('statLucro').className = `text-xl font-black mt-1 ${lucroTotal >= 0 ? 'text-green-400' : 'text-red-400'}`;
-            document.getElementById('statTotal').innerText = bets.length;
             document.getElementById('statBancaAtual').innerText = `R$ ${currentBank.toFixed(2)}`;
+            let varBanca = initialBank > 0 ? ((currentBank - initialBank) / initialBank) * 100 : 0;
+            document.getElementById('badgeBancaVar').innerText = `${varBanca >= 0 ? '↑' : '↓'} ${Math.abs(varBanca).toFixed(1)}%`;
+
+            document.getElementById('statLucro').innerText = `R$ ${lucroTotal.toFixed(2)}`;
+            let roi = initialBank > 0 ? (lucroTotal / initialBank) * 100 : 0;
+            document.getElementById('badgeRoi').innerText = `ROI: ${roi.toFixed(1)}%`;
+
+            let finalizadas = greens + reds;
+            let winrate = finalizadas > 0 ? (greens / finalizadas) * 100 : 0;
+            document.getElementById('statWinrate').innerText = `${winrate.toFixed(1)}%`;
+            document.getElementById('badgeGreensReds').innerText = `${greens}G / ${reds}R`;
+
+            document.getElementById('statTotal').innerText = bets.length;
+            let oddMedia = bets.length > 0 ? (somaOdds / bets.length) : 0;
+            document.getElementById('badgeOddMedia').innerText = `Odd Média: ${oddMedia.toFixed(2)}`;
 
             salvarStorage();
             recalcularStakeInput();
-            atualizarGraficoContagem();
+            atualizarGraficos();
             atualizarBotaoDesfazerUI();
         }
 
-        function atualizarGraficoContagem() {
+        function atualizarGraficos() {
             const mercados = ['Gols', 'Escanteios', 'Cartões', 'Handicap', 'Outros'];
             let greensData = [0, 0, 0, 0, 0];
             let redsData = [0, 0, 0, 0, 0];
+            let contagemMercados = [0, 0, 0, 0, 0];
 
             bets.forEach(bet => {
                 let idx = mercados.indexOf(bet.mercado);
                 if (idx !== -1) {
+                    contagemMercados[idx]++;
                     if (bet.status === 'Green') greensData[idx]++;
                     if (bet.status === 'Red') redsData[idx]++;
                 }
             });
 
-            const ctx = document.getElementById('mercadoChart').getContext('2d');
+            const ctx1 = document.getElementById('mercadoChart').getContext('2d');
             if (chartInstance) chartInstance.destroy();
 
-            chartInstance = new Chart(ctx, {
+            chartInstance = new Chart(ctx1, {
                 type: 'bar',
                 data: {
                     labels: mercados,
                     datasets: [
-                        { label: 'Greens', data: greensData, backgroundColor: '#22c55e', borderRadius: 4 },
-                        { label: 'Reds', data: redsData, backgroundColor: '#ef4444', borderRadius: 4 }
+                        { label: 'Greens', data: greensData, backgroundColor: '#10b981', borderRadius: 6 },
+                        { label: 'Reds', data: redsData, backgroundColor: '#ef4444', borderRadius: 6 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top', labels: { color: '#9ca3af', boxWidth: 12 } } },
+                    plugins: { legend: { position: 'top', labels: { color: '#9ca3af', boxWidth: 10, font: { size: 10 } } } },
                     scales: {
-                        x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 11 } } },
-                        y: { grid: { color: '#27272a' }, ticks: { color: '#9ca3af', font: { size: 11 }, precision: 0 } }
+                        x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } } },
+                        y: { grid: { color: '#1f2330' }, ticks: { color: '#9ca3af', font: { size: 10 }, precision: 0 } }
                     }
+                }
+            });
+
+            const ctx2 = document.getElementById('donutChart').getContext('2d');
+            if (donutChartInstance) donutChartInstance.destroy();
+
+            donutChartInstance = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: mercados,
+                    datasets: [{
+                        data: contagemMercados,
+                        backgroundColor: ['#3b82f6', '#ec4899', '#10b981', '#f59e0b', '#8b5cf6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right', labels: { color: '#9ca3af', boxWidth: 10, font: { size: 10 } } } },
+                    cutout: '70%'
                 }
             });
         }
@@ -548,8 +603,8 @@
             this.reset();
             taxaSelecionada = null;
             document.querySelectorAll('.btn-pct').forEach(btn => {
-                btn.classList.remove('border-brandOrange', 'bg-brandOrange/20', 'text-white');
-                btn.classList.add('border-gray-700', 'text-gray-300');
+                btn.classList.remove('border-amber-500', 'bg-amber-500/20', 'text-white');
+                btn.classList.add('border-darkCardBorder', 'text-gray-300');
             });
             document.getElementById('infoCapitalExato').innerText = 'R$ 0,00';
         });
@@ -597,16 +652,17 @@
             const btn = document.getElementById('btnDesfazer');
             if (ultimoEstadoExcluido !== null) {
                 btn.disabled = false;
-                btn.className = "bg-yellow-500 hover:bg-yellow-400 text-gray-950 font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wider transition shadow-lg shadow-yellow-500/10 flex items-center gap-1.5 cursor-pointer";
+                btn.className = "bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/20 flex items-center gap-1.5 cursor-pointer";
             } else {
                 btn.disabled = true;
-                btn.className = "bg-gray-800 text-gray-500 font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wider transition flex items-center gap-1.5 cursor-not-allowed";
+                btn.className = "bg-darkBg text-gray-500 font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition flex items-center gap-1.5 cursor-not-allowed border border-darkCardBorder";
             }
         }
 
         // ==========================================
-        // FUNÇÕES DO MENU DE ALAVANCAGEM
+        // MENU DE ALAVANCAGEM
         // ==========================================
+
         function gerarOpcoesOdds(oddAtual) {
             let options = '';
             for (let o = 1.00; o <= 3.00; o += 0.05) {
@@ -618,57 +674,6 @@
         }
 
         function updateAlavancagemUI() {
-            const tbodyMensal = document.getElementById('tabelaMensalBody');
-            tbodyMensal.innerHTML = '';
-
-            let totalMeta = 0;
-
-            if (mesesAlavancagem.length === 0) {
-                tbodyMensal.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-gray-500">Nenhum mês cadastrado.</td></tr>`;
-            } else {
-                mesesAlavancagem.forEach((m) => {
-                    let bancaFinal = (m.bancaInicial * (1 + (m.lucroPct / 100))) + m.aporte;
-                    if (m.resultado === 'Sim') {
-                        totalMeta = bancaFinal;
-                    }
-
-                    let corResultado = 'text-gray-400';
-                    if (m.resultado === 'Sim') corResultado = 'text-green-400 border-green-500/40';
-                    else if (m.resultado === 'Não') corResultado = 'text-red-400 border-red-500/40';
-                    else if (m.resultado === 'Pendente') corResultado = 'text-yellow-400 border-yellow-500/40';
-
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td class="py-3 px-3 font-medium text-white">
-                            <input type="text" value="${m.mes}" onchange="atualizarMesAlavancagem(${m.id}, 'mes', this.value)" class="bg-darkBg border border-gray-700 rounded px-2 py-1 w-28 text-sm text-white focus:outline-none focus:border-brandOrange">
-                        </td>
-                        <td class="py-3 px-3">
-                            <input type="number" step="0.01" value="${m.bancaInicial}" onchange="atualizarMesAlavancagem(${m.id}, 'bancaInicial', this.value)" class="bg-darkBg border border-gray-700 rounded px-2 py-1 w-28 text-sm text-white focus:outline-none focus:border-brandOrange">
-                        </td>
-                        <td class="py-3 px-3">
-                            <input type="number" step="0.01" value="${m.lucroPct}" onchange="atualizarMesAlavancagem(${m.id}, 'lucroPct', this.value)" class="bg-darkBg border border-gray-700 rounded px-2 py-1 w-20 text-sm text-white focus:outline-none focus:border-brandOrange"> %
-                        </td>
-                        <td class="py-3 px-3">
-                            <input type="number" step="0.01" value="${m.aporte}" onchange="atualizarMesAlavancagem(${m.id}, 'aporte', this.value)" class="bg-darkBg border border-gray-700 rounded px-2 py-1 w-28 text-sm text-white focus:outline-none focus:border-brandOrange">
-                        </td>
-                        <td class="py-3 px-3 text-brandOrange font-bold">
-                            R$ ${bancaFinal.toFixed(2)}
-                        </td>
-                        <td class="py-3 px-3">
-                            <select onchange="atualizarMesAlavancagem(${m.id}, 'resultado', this.value)" class="bg-darkBg border border-gray-700 text-xs rounded px-2 py-1 focus:outline-none focus:border-brandOrange ${corResultado}">
-                                <option value="Sim" ${m.resultado === 'Sim' ? 'selected' : ''}>Sim</option>
-                                <option value="Não" ${m.resultado === 'Não' ? 'selected' : ''}>Não</option>
-                                <option value="Pendente" ${m.resultado === 'Pendente' ? 'selected' : ''}>Pendente</option>
-                            </select>
-                        </td>
-                        <td class="py-3 px-3 text-center">
-                            <button onclick="deletarMesAlavancagem(${m.id})" class="text-gray-500 hover:text-red-400 text-xs transition" title="Excluir Mês">✕</button>
-                        </td>
-                    `;
-                    tbodyMensal.appendChild(tr);
-                });
-            }
-
             const tbodyDiaria = document.getElementById('tabelaDiariaBody');
             tbodyDiaria.innerHTML = '';
 
@@ -680,24 +685,24 @@
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td class="py-3 px-3 font-medium text-white">
-                            <input type="text" value="${d.dia}" onchange="atualizarDiaAlavancagem(${d.id}, 'dia', this.value)" class="bg-darkBg border border-gray-700 rounded px-2 py-1 w-24 text-sm text-white focus:outline-none focus:border-brandOrange">
+                        <td class="py-3 px-3 font-semibold text-white">
+                            <input type="text" value="${d.dia}" onchange="atualizarDiaAlavancagem(${d.id}, 'dia', this.value)" class="bg-darkBg border border-darkCardBorder rounded-lg px-2.5 py-1.5 w-24 text-sm text-white focus:outline-none focus:border-amber-500">
                         </td>
                         <td class="py-3 px-3">
-                            <input type="number" step="0.01" value="${d.valor}" onchange="atualizarDiaAlavancagem(${d.id}, 'valor', this.value)" class="bg-darkBg border border-gray-700 rounded px-2 py-1 w-28 text-sm text-white font-bold text-brandOrange focus:outline-none focus:border-brandOrange">
+                            <input type="number" step="0.01" value="${d.valor}" onchange="atualizarDiaAlavancagem(${d.id}, 'valor', this.value)" class="bg-darkBg border border-darkCardBorder rounded-lg px-2.5 py-1.5 w-28 text-sm text-amber-400 font-bold focus:outline-none focus:border-amber-500">
                         </td>
                         <td class="py-3 px-3">
-                            <select onchange="atualizarDiaAlavancagem(${d.id}, 'odd', this.value)" class="bg-darkBg border border-gray-700 text-xs rounded px-2 py-1 text-white focus:outline-none focus:border-brandOrange">
+                            <select onchange="atualizarDiaAlavancagem(${d.id}, 'odd', this.value)" class="bg-darkBg border border-darkCardBorder text-xs rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
                                 ${gerarOpcoesOdds(d.odd)}
                             </select>
                         </td>
-                        <td class="py-3 px-3 text-green-400 font-bold">
+                        <td class="py-3 px-3 text-emerald-400 font-bold">
                             R$ ${retorno.toFixed(2)}
                         </td>
                         <td class="py-3 px-3">
-                            <select onchange="atualizarDiaAlavancagem(${d.id}, 'resultado', this.value)" class="bg-darkBg border border-gray-700 text-xs rounded px-2 py-1 focus:outline-none focus:border-brandOrange ${
-                                d.resultado === 'Green' ? 'text-green-400 border-green-500/40' : 
-                                d.resultado === 'Red' ? 'text-red-400 border-red-500/40' : 'text-yellow-400 border-yellow-500/40'
+                            <select onchange="atualizarDiaAlavancagem(${d.id}, 'resultado', this.value)" class="bg-darkBg border border-darkCardBorder text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none ${
+                                d.resultado === 'Green' ? 'text-emerald-400 border-emerald-500/40 bg-emerald-500/5' : 
+                                d.resultado === 'Red' ? 'text-red-400 border-red-500/40 bg-red-500/5' : 'text-amber-400 border-amber-500/40 bg-amber-500/5'
                             }">
                                 <option value="Pendente" ${d.resultado === 'Pendente' ? 'selected' : ''}>Pendente</option>
                                 <option value="Green" ${d.resultado === 'Green' ? 'selected' : ''}>Green</option>
@@ -705,55 +710,14 @@
                             </select>
                         </td>
                         <td class="py-3 px-3 text-center">
-                            <button onclick="deletarDiaAlavancagem(${d.id})" class="text-gray-500 hover:text-red-400 text-xs transition" title="Excluir Dia">✕</button>
+                            <button onclick="deletarDiaAlavancagem(${d.id})" class="text-gray-500 hover:text-red-400 text-xs transition p-1" title="Excluir Dia">✕</button>
                         </td>
                     `;
                     tbodyDiaria.appendChild(tr);
                 });
             }
 
-            let ultimaBancaFinal = 0;
-            if (mesesAlavancagem.length > 0) {
-                const ultimo = mesesAlavancagem[mesesAlavancagem.length - 1];
-                ultimaBancaFinal = (ultimo.bancaInicial * (1 + (ultimo.lucroPct / 100))) + ultimo.aporte;
-            }
-            document.getElementById('statMetaAlavancagem').innerText = `R$ ${ultimaBancaFinal.toFixed(2)}`;
-
             salvarStorage();
-        }
-
-        window.adicionarMesAlavancagem = function() {
-            const novoId = mesesAlavancagem.length > 0 ? mesesAlavancagem[mesesAlavancagem.length - 1].id + 1 : 1;
-            const ultimoMes = mesesAlavancagem.length > 0 ? (mesesAlavancagem[mesesAlavancagem.length - 1].bancaInicial * (1 + (mesesAlavancagem[mesesAlavancagem.length - 1].lucroPct / 100))) + mesesAlavancagem[mesesAlavancagem.length - 1].aporte : 1000.00;
-            
-            mesesAlavancagem.push({
-                id: novoId,
-                mes: 'Mês ' + novoId,
-                bancaInicial: parseFloat(ultimoMes.toFixed(2)),
-                lucroPct: 30.00,
-                aporte: 0.00,
-                resultado: 'Pendente'
-            });
-            updateAlavancagemUI();
-        }
-
-        window.atualizarMesAlavancagem = function(id, campo, valor) {
-            const m = mesesAlavancagem.find(item => item.id === id);
-            if (m) {
-                if (campo === 'mes' || campo === 'resultado') {
-                    m[campo] = valor;
-                } else {
-                    m[campo] = parseFloat(valor) || 0;
-                }
-                updateAlavancagemUI();
-            }
-        }
-
-        window.deletarMesAlavancagem = function(id) {
-            if (confirm('Deseja excluir este mês do planejamento?')) {
-                mesesAlavancagem = mesesAlavancagem.filter(item => item.id !== id);
-                updateAlavancagemUI();
-            }
         }
 
         window.adicionarDiaAlavancagem = function() {
